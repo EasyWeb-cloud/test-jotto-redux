@@ -32,7 +32,27 @@ describe('if there is no words guessed', () => {
 })
 
 describe('if there are words guessed', () => {
-    test('renders withour errors', () => {
+    let wrapper
+    const guessedWords = [
+        {guessedWord: 'train', letterMatchCount: 3},
+        {guessedWord: 'agile', letterMatchCount: 1},
+        {guessedWord: 'party', letterMatchCount: 5}
+    ]
+    beforeEach(() => {
+        wrapper = setup({ guessedWords })
+    })
+    test('renders withour errors', async () => {
+        const component = await findByTestAttr(wrapper, 'component-guessed-words')
+        expect(component.length).toBe(1)
+    })
 
+    test('renders "guessed words" section', async () => {
+        const guessWordsNode = await findByTestAttr(wrapper, 'guessed-words')
+        expect(guessWordsNode.length).toBe(1)
+    })
+
+    test('correct numbers of guessed words', async () => {
+        const guessWordNode = await findByTestAttr(wrapper, 'guessed-word')
+        expect(guessWordNode.length).toBe(guessedWords.length)
     })
 })

@@ -10,6 +10,32 @@ const GuessedWords = (props) => {
                 Try to guess the word!
             </span>
         )
+    } else {
+        contents = (
+            <div data-test="guessed-words">
+                <h3>Guessed Words</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Guessed Word</th>
+                            <th>Matching Letters</th>
+                        </tr>
+                    </thead>  
+                    <tbody>
+                        { guessedWords.map((word, index) => (
+                            <tr data-test='guessed-word' key={index}>
+                                <td>
+                                    { word.guessedWords }
+                                </td>
+                                <td>
+                                    { word.letterMatchCount }
+                                </td>
+                            </tr>
+                        )) }
+                    </tbody>  
+                </table>
+            </div>
+        )
     }
 
     return <div data-test='component-guessed-words'>
