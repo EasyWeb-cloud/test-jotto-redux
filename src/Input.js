@@ -1,9 +1,13 @@
 import React from 'react'
 
 const Input = (props) => {
-    const { secretWord } = props
+    const { success, secretWord } = props
 
     const [ currentGuess, setCurrentGuess ] = React.useState('')
+
+    if(success){
+        return <div data-test='component-input' />
+    }
 
     return (
         <div data-test='component-input'>

@@ -4,12 +4,51 @@ import React from 'react'
 import Input from './Input'
 import { findByTestAttr } from '../test/testUtils'
 
-const setup = (secretWord='party') => shallow(<Input secretWord={secretWord}/>)
+const setup = (success=false, secretWord='party') => 
+    shallow(<Input success={success} secretWord={secretWord}/>)
 
-test('renders without errors', async () => {
-    const wrapper = setup()
-    const component = await findByTestAttr(wrapper, 'component-input')
-    expect(component.length).toBe(1)
+describe('render', () => {
+    describe('success is true', () => {
+        let wrapper
+        beforeEach(() => {
+            wrapper = setup(true)
+        })
+        test('renders without errors', async () => {
+            const component = await findByTestAttr(wrapper, 'component-input')
+            expect(component.length).toBe(1)
+        })
+
+        test('input box isnt shown', async () => {
+            const inputBox = await findByTestAttr(wrapper, 'input-box')
+            expect(inputBox.exists()).toBe(false)
+        })
+
+        test('submit button isnt shown', async () => {
+            const submitButton = await findByTestAttr(wrapper, 'submit-button')
+            expect(submitButton.exists()).toBe(false)
+        })
+    })
+
+    describe('success is false', () => {
+        let wrapper
+        beforeEach(() => {
+            wrapper = setup(false)
+        })
+        test('renders without errors', async () => {
+            const component = await findByTestAttr(wrapper, 'component-input')
+            expect(component.length).toBe(1)
+        })
+
+        test('input box be shown', async () => {
+            const inputBox = await findByTestAttr(wrapper, 'input-box')
+            expect(inputBox.exists()).toBe(true)
+        })
+
+        test('submit button be shown', async () => {
+            const submitButton = await findByTestAttr(wrapper, 'submit-button')
+            expect(submitButton.exists()).toBe(true)
+        })
+    })
 })
 
 describe('state controlled input field', () => {
