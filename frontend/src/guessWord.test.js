@@ -1,11 +1,15 @@
 import React from 'react'
 import { mount } from 'enzyme'
+import { Provider } from 'react-redux'
 
 import App from './App'
-import { findByTestAttr } from '../test/testUtils'
+import { findByTestAttr, storeFactory } from '../test/testUtils'
 
-const setup = async (state = {}) => {
-    const wrapper = mount(<App {...state}/>)
+jest.mock('./actions')
+
+const setup = async (initialState = {}) => {
+    const store = storeFactory(initialState)
+    const wrapper = mount(<Provider store={store}><App /></Provider>)
 
     const inputBox = await findByTestAttr(wrapper, 'input-box')
     inputBox.simulate('change', { target: { value: 'train' } })
@@ -16,7 +20,7 @@ const setup = async (state = {}) => {
     return wrapper
 }
 
-describe.skip('no words guessed', () => {
+describe('no words guessed', () => {
     let wrapper
     beforeEach(async () => {
         wrapper = await setup({
@@ -28,11 +32,11 @@ describe.skip('no words guessed', () => {
 
     test('creates GuessedWords table with one row', async () => {
         const guessedWordsRows = await findByTestAttr(wrapper, 'guessed-word')
-        expect(guessedWordsRows).toHaveLength(0)
+        expect(guessedWordsRows).toHaveLength(1)
     })
 })
 
-describe.skip('some words guessed', () => {
+describe('some words guessed', () => {
     let wrapper
     beforeEach(async () => {
         wrapper = await setup({
@@ -44,11 +48,11 @@ describe.skip('some words guessed', () => {
 
     test('adds to row GuessedWords', async () => {
         const guessedWordsRows = await findByTestAttr(wrapper, 'guessed-word')
-        expect(guessedWordsRows).toHaveLength(1)
+        expect(guessedWordsRows).toHaveLength(2)
     })
 })
 
-describe.skip('guess secret word', () => {
+describe('guess secret word', () => {
     let wrapper
     beforeEach(async () => {
         wrapper = await setup({
@@ -67,11 +71,11 @@ describe.skip('guess secret word', () => {
 
     test('add new row to the table', async () => {
         const guessedWordNodes = await findByTestAttr(wrapper, 'guessed-word')
-        expect(guessedWordNodes).toHaveLength(2)
+        expect(guessedWordNodes).toHaveLength(3)
     })
     test('displays congrats component', async () => {
-        const congrats = await findByTestAttr(wrapper, 'componennt-congrats')
-        expect(congrats.text().length).toBeGreaterThen(0)
+        const congrats = await findByTestAttr(wrapper, 'component-congrats')
+        expect(congrats.text().length).toBeGreaterThan(0)
     })
 
     test('does not display input component', async () => {

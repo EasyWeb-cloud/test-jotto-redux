@@ -1,6 +1,7 @@
 import moxios from 'moxios'
 
 import { getSecretWord } from './'
+import { storeFactory } from '../../test/testUtils'
 
 describe('getSecretWord', () => {
     beforeEach(() => {
@@ -12,6 +13,8 @@ describe('getSecretWord', () => {
     })
 
     test('word is returned from func', async () => {
+        const store = storeFactory()
+
         await moxios.wait(() => {
             const request = moxios.requests.mostRecent()
             request.respondWith({
@@ -20,6 +23,10 @@ describe('getSecretWord', () => {
             }) 
         })
 
-        return getSecretWord().then(secretWord => expect(secretWord).toBe('party'))
+        return store.dispatch(getSecretWord())
+        .then(() => {
+            const secretWord = store.getState().secretWord
+            expect(secretWord).toBe('party')
+        })
     })
 })
