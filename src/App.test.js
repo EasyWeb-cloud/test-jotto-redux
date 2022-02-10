@@ -1,13 +1,17 @@
 import { mount } from "enzyme";
+import { Provider } from "react-redux";
 
 import App from './App'
-import { findByTestAttr } from "../test/testUtils";
+import { findByTestAttr, storeFactory } from "../test/testUtils";
 
 jest.mock('./actions')
 // eslint-disable-next-line import/first
 import { getSecretWord as mockGetSecretWord } from './actions'
 
-const setup = () => mount(<App />)
+const setup = (initialState = {}) => {
+    const store = storeFactory(initialState)
+    return mount(<Provider store={store}><App /></Provider>)
+}
 
 test('renders without errors', async () => {
     const wrapper = setup()
@@ -20,6 +24,7 @@ describe('get secret word', () => {
         mockGetSecretWord.mockClear()
     })
     test('getSecretWord on app mount', () => {
+        // eslint-disable-next-line no-unused-vars
         const wrapper = setup()
 
         expect(mockGetSecretWord).toHaveBeenCalledTimes(1)

@@ -1,7 +1,9 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 const Input = (props) => {
-    const { success, secretWord } = props
+    const { secretWord } = props
+    const success = useSelector(state => state.success)
 
     const [ currentGuess, setCurrentGuess ] = React.useState('')
 
